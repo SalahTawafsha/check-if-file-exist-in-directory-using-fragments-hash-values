@@ -51,18 +51,23 @@ public class Main extends Application {
 
 
         Button targetButton = new Button("Select target file");
-        Button button = new Button("Select recovered from image folder");
+        targetButton.setDisable(true);
 
+        size.setOnKeyReleased(e -> targetButton.setDisable(size.getText().isEmpty()));
 
-        VBox box = new VBox(20, pane, targetButton, button, pane2);
+        Button recoveredButton = new Button("Select recovered from image folder");
+        recoveredButton.setDisable(true);
+
+        VBox box = new VBox(20, pane, targetButton, recoveredButton, pane2);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(50));
         box.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         stage.setTitle("Forensic Project");
-        Scene scene = new Scene(box, 1000, 800);
+        Scene scene = new Scene(box, 1400, 800);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
 
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
 
         targetButton.setOnAction(e -> {
@@ -74,15 +79,24 @@ public class Main extends Application {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     directoryChooser.setInitialDirectory(new File("C:\\Users\\user\\PycharmProjects\\forensic"));
 
+                    recoveredButton.setDisable(false);
+                    size.setEditable(false);
+                    targetButton.setDisable(true);
 
-                    button.setOnAction(e1 -> {
+                    recoveredButton.setOnAction(e1 -> {
+                        targetButton.setDisable(true);
+                        recoveredButton.setDisable(true);
                         File directory = directoryChooser.showDialog(stage);
-                        File[] files = directory.listFiles();
-                        RecoveredFiles recoveredFiles = new RecoveredFiles(files, targetFile.getFileType(), targetFile.getSize());
+                        if (directory == null)
+                            recoveredButton.setDisable(false);
+                        else {
+                            File[] files = directory.listFiles();
+                            RecoveredFiles recoveredFiles = new RecoveredFiles(files, targetFile.getFileType(), targetFile.getSize());
 
-                        String matchingStr = percentOfMatching(targetFile.getTargetHashing(), recoveredFiles.getRecoveredHashing(), box);
-                        System.out.println(matchingStr);
-                        matchingTextField.setText(matchingStr);
+                            String matchingStr = percentOfMatching(targetFile.getTargetHashing(), recoveredFiles.getRecoveredHashing(), box);
+                            System.out.println(matchingStr);
+                            matchingTextField.setText(matchingStr);
+                        }
                     });
                 } catch (NumberFormatException e1) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -120,11 +134,17 @@ public class Main extends Application {
         ObservableList<String> matchingList = FXCollections.observableArrayList();
         ObservableList<String> nonMatchingList = FXCollections.observableArrayList();
         for (String s : targetHashing) {
+            char[] ch = s.toCharArray();
+            StringBuilder sb = new StringBuilder();
+            for (char c : ch) {
+                String hexString = Integer.toHexString(c).toUpperCase();
+                sb.append(hexString);
+            }
             if (recoveredHashing.contains(s)) {
                 matching++;
-                matchingList.add(s);
+                matchingList.add(sb.toString());
             } else
-                nonMatchingList.add(s);
+                nonMatchingList.add(sb.toString());
             size++;
         }
 
