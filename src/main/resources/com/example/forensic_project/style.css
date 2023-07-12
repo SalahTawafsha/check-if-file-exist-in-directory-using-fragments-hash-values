@@ -94,7 +94,11 @@
     -fx-background-radius: 20;
 }
 
-
+TextField {
+    -fx-background-radius: 50;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
 
 .progress-bar .track {
     -fx-background-radius: 20;

@@ -2,7 +2,6 @@ package FilesReaders;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -14,10 +13,9 @@ import java.util.List;
 public class TargetFile {
 
 
-    private String fileType;
+    private final String fileType;
     private final List<String> targetHashing = new ArrayList<>();
     private final int size;
-    private boolean error;
 
     public TargetFile(File input, int size) throws IOException {
         if (input == null || !input.exists())
