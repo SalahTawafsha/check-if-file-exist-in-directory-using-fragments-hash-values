@@ -9,14 +9,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Objects;
 
 public class Main extends Application {
 
@@ -37,21 +37,31 @@ public class Main extends Application {
         GridPane pane = new GridPane();
         pane.add(new Label("Fragment size in KB:"), 0, 0);
         pane.add(size, 1, 0);
-        pane.add(new Label("Result:"), 0, 1);
-        pane.add(matchingTextField, 1, 1);
         pane.setAlignment(Pos.CENTER);
         pane.setHgap(10);
         pane.setVgap(10);
+
+
+        GridPane pane2 = new GridPane();
+        pane2.add(new Label("Result:"), 0, 0);
+        pane2.add(matchingTextField, 1, 0);
+        pane2.setAlignment(Pos.CENTER);
+        pane2.setHgap(10);
+        pane2.setVgap(10);
+
 
         Button targetButton = new Button("Select target file");
         Button button = new Button("Select recovered from image folder");
 
 
-        VBox box = new VBox(20, pane, targetButton, button);
+        VBox box = new VBox(20, pane, targetButton, button, pane2);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(50));
+        box.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         stage.setTitle("Forensic Project");
         Scene scene = new Scene(box, 1000, 800);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+
         stage.setScene(scene);
         stage.show();
 
@@ -130,10 +140,10 @@ public class Main extends Application {
 
         HBox all = new HBox(10, match, nonMatch);
         all.setAlignment(Pos.CENTER);
-        if (box.getChildren().size() == 3)
+        if (box.getChildren().size() == 4)
             box.getChildren().add(all);
         else
-            box.getChildren().set(3, all);
+            box.getChildren().set(4, all);
         return (double) matching / size * 100 + "%";
     }
 
