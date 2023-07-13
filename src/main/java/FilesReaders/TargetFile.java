@@ -28,27 +28,16 @@ public class TargetFile {
 
             byte[] buffer = new byte[size];
 
-            int j, count = 1;
-            while ((j = scan.read(buffer)) != -1) {
-//                try (FileOutputStream out = new FileOutputStream("targetFileFragments/" + input.getName().substring(0, input.getName().lastIndexOf(".")) + "(" + count + ")" + ".frg");) {
-//                    out.write(buffer, 0, j);
-                try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            int j;
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                while ((j = scan.read(buffer)) != -1) {
                     byte[] encodedHash = digest.digest(Arrays.copyOfRange(buffer, 0, j));
                     targetHashing.add(new String(encodedHash));
-//                } catch (IOException e) {
-//                    Alert alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setTitle("Error");
-//                    alert.setHeaderText("Error while writing to file");
-//                    alert.setContentText("Please try again");
-//                    alert.show();
-//                    error = true;
-//                    break;
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                }
 
-                count++;
+                }
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
             }
 
 

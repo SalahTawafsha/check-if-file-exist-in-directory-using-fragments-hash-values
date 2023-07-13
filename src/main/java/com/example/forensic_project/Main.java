@@ -94,7 +94,6 @@ public class Main extends Application {
                             RecoveredFiles recoveredFiles = new RecoveredFiles(files, targetFile.getFileType(), targetFile.getSize());
 
                             String matchingStr = percentOfMatching(targetFile.getTargetHashing(), recoveredFiles.getRecoveredHashing(), box);
-                            System.out.println(matchingStr);
                             matchingTextField.setText(matchingStr);
                         }
                     });
