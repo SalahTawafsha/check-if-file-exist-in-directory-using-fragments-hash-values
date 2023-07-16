@@ -33,11 +33,6 @@ public class RecoveredFiles {
                             }
                             scan.close();
                         }
-                        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                        FileInputStream fileInputStream = new FileInputStream(file);
-                        byte[] encodedHash = digest.digest(fileInputStream.readAllBytes());
-                        recoveredHashing.add(new String(encodedHash));
-                        fileInputStream.close();
                     }
                 }
             }
